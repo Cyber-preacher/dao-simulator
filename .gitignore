@@ -1,0 +1,17 @@
+﻿# dependencies
+**/node_modules/
+
+# Next.js
+**/.next/
+**/out/
+.vercel/
+
+# env
+.env
+.env.*
+
+# editors
+.vscode/
+
+# keep only the root lockfile (ignore nested app lockfiles)
+web/pnpm-lock.yaml
