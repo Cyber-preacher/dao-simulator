@@ -1,40 +1,71 @@
 ﻿name: Desktop Builds
+
 on:
   workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
+
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix: { os: [windows-latest, macos-latest] }
-    runs-on: ${{ matrix.os }}
-    env:
-      CSC_IDENTITY_AUTO_DISCOVERY: "false"   # do not attempt mac codesigning
-      DEBUG: "electron-builder"              # verbose logs for troubleshooting
+  build-windows:
+    name: Build Windows (.exe)
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+        with:
+          node-version: "20"
       - uses: pnpm/action-setup@v4
-        with: { version: 9, run_install: false }
+        with:
+          version: 9
+          run_install: false
 
       - name: Install web deps
         run: pnpm -C web install
-
       - name: Build web (Next static export)
         run: pnpm -C web build
-
       - name: Install desktop deps
         run: pnpm -C desktop install
-
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
 
-      - name: Upload artifacts
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: desktop/dist/*
+          if-no-files-found: error
+
+  build-macos:
+    name: Build macOS (.dmg)
+    runs-on: macos-latest
+    continue-on-error: true
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      DEBUG: "electron-builder"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install web deps
+        run: pnpm -C web install
+      - name: Build web (Next static export)
+        run: pnpm -C web build
+      - name: Install desktop deps
+        run: pnpm -C desktop install
+      - name: Build desktop artifacts
+        run: pnpm -C desktop dist
+
+      - name: Upload macOS image
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: desktop-${{ matrix.os }}
+          name: macos-image
           path: desktop/dist/*
+          if-no-files-found: ignore
