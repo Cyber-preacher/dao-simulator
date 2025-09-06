@@ -19,7 +19,6 @@ jobs:
         with:
           version: 9
           run_install: false
-
       - name: Install web deps
         run: pnpm -C web install
       - name: Build web (Next static export)
@@ -28,7 +27,6 @@ jobs:
         run: pnpm -C desktop install
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
-
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
@@ -52,7 +50,6 @@ jobs:
         with:
           version: 9
           run_install: false
-
       - name: Install web deps
         run: pnpm -C web install
       - name: Build web (Next static export)
@@ -61,7 +58,6 @@ jobs:
         run: pnpm -C desktop install
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
-
       - name: Upload macOS image
         if: always()
         uses: actions/upload-artifact@v4
