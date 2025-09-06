@@ -32,7 +32,6 @@ jobs:
         run: pnpm -C desktop install --no-frozen-lockfile
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
-
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
@@ -56,20 +55,16 @@ jobs:
         with:
           version: 9
           run_install: false
-
       - name: Install web deps
         run: pnpm -C web install --no-frozen-lockfile
       - name: Build web (Next static export)
         run: pnpm -C web build
-
       - name: Ensure no BOM in desktop/package.json
         run: node -e "const fs=require('fs');const p='desktop/package.json';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));console.log('Stripped BOM');}else{console.log('No BOM');}"
-
       - name: Install desktop deps
         run: pnpm -C desktop install --no-frozen-lockfile
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
-
       - name: Upload macOS image
         if: always()
         uses: actions/upload-artifact@v4
@@ -77,3 +72,29 @@ jobs:
           name: macos-image
           path: desktop/dist/*
           if-no-files-found: ignore
+
+  release:
+    name: Draft GitHub Release (attach installers)
+    needs: [build-windows, build-macos]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release_assets
+          pattern: "*"
+          merge-multiple: true
+
+      - name: List assets we will upload
+        run: ls -R release_assets
+
+      - name: Create draft release & upload installers
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            release_assets/**/*.exe
+            release_assets/**/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
