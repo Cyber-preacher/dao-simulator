@@ -1,4 +1,5 @@
-﻿import type { GameState, Metrics, Proposal, TurnResult } from "@/lib/types";
+﻿import { scaleByRoll } from "@/lib/rollScaling";
+import type { GameState, Metrics, Proposal, TurnResult } from "@/lib/types";
 import { ROLL_MULTIPLIER } from "@/lib/util";
 
 function clamp01(n: number) { return Math.max(0, Math.min(100, Math.round(n))); }
@@ -116,4 +117,5 @@ export function applyTurn(
     endReason,
   };
 }
+
 
