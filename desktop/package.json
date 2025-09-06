@@ -1,6 +1,6 @@
 ﻿{
   "name": "dao-simulator-desktop",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "main": "main.js",
   "description": "Crypto DAO Simulator - Desktop",
@@ -9,7 +9,7 @@
     "dev": "concurrently -k \"pnpm -C ../web dev\" \"wait-on http://localhost:3000 && electron .\"",
     "build:web": "pnpm -C ../web build",
     "pack": "pnpm run build:web && electron-builder --dir",
-    "dist": "pnpm run build:web && electron-builder"
+    "dist": "pnpm run build:web && electron-builder --publish=never"
   },
   "dependencies": {},
   "devDependencies": {
@@ -24,14 +24,7 @@
     "files": ["main.js","package.json"],
     "extraResources": [{ "from": "../web/out", "to": "app-web" }],
     "directories": { "output": "dist" },
-    "mac": {
-      "target": ["dmg"],
-      "category": "public.app-category.games",
-      "identity": null
-    },
-    "win": {
-      "target": ["nsis"]
-    },
-    "publish": "never"
+    "mac": { "target": ["dmg"], "category": "public.app-category.games", "identity": null },
+    "win": { "target": ["nsis"] }
   }
 }
