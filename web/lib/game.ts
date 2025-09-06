@@ -56,8 +56,8 @@ export function applyTurn(
     let sideNote = "";
     if (roll <= 2 && p.customBad) sideNote = p.customBad.trim();
     if (roll >= 4 && p.customGood) sideNote = p.customGood.trim();
-    if (roll === 1) { const r = ["development", "community", "hype"][Math.floor(Math.random() * 3)] as keyof Metrics; (next as any)[r] = clamp01((next as any)[r] - 2); sideNote = sideNote ? `${sideNote} · Extra setback.` : "Extra setback."; }
-    if (roll === 6) { const r = ["development", "community", "hype"][Math.floor(Math.random() * 3)] as keyof Metrics; (next as any)[r] = clamp01((next as any)[r] + 2); sideNote = sideNote ? `${sideNote} · Tailwind.` : "Tailwind."; }
+    if (roll === 1) { const r = ["development", "community", "hype"][Math.floor(Math.random() * 3)] as keyof Metrics; next[r] = clamp01(next[r] - 2); sideNote = sideNote ? `${sideNote} · Extra setback.` : "Extra setback."; }
+    if (roll === 6) { const r = ["development", "community", "hype"][Math.floor(Math.random() * 3)] as keyof Metrics; next[r] = clamp01(next[r] + 2); sideNote = sideNote ? `${sideNote} · Tailwind.` : "Tailwind."; }
 
     applied.push({ proposal: p, roll, appliedMultiplier: mult, sideNote, effectiveCostUSD: eff.usd, effectiveCostTokens: eff.tokens });
   });
@@ -116,3 +116,4 @@ export function applyTurn(
     endReason,
   };
 }
+

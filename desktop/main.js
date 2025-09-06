@@ -9,14 +9,15 @@ function createWindow() {
     webPreferences: { contextIsolation: true }
   });
 
-  const isDev = !app.isPackaged;
-
-  if (isDev) {
+  if (!app.isPackaged) {
     win.loadURL("http://localhost:3000");
   } else {
     const indexPath = path.join(process.resourcesPath, "app-web", "index.html");
-    if (fs.existsSync(indexPath)) win.loadFile(indexPath);
-    else win.loadURL("https://example.invalid/");
+    if (fs.existsSync(indexPath)) {
+      win.loadFile(indexPath);
+    } else {
+      win.loadURL("https://example.invalid/");
+    }
   }
 
   win.removeMenu?.();

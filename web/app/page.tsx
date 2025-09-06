@@ -456,9 +456,9 @@ export default function Page() {
                     {state.priceRollTable.map((v, i) => (
                       <Input key={i} type="number" value={v} onChange={(e) => {
                         const val = Number(e.target.value || 0);
-                        const next = [...state.priceRollTable] as any;
+                        const next = [...state.priceRollTable] as number[];
                         next[i] = val;
-                        setState({ ...state, priceRollTable: next });
+                        setState({ ...state, priceRollTable: (next as unknown as typeof state.priceRollTable) });
                       }} placeholder={["1","2","3","4","5","6"][i]} />
                     ))}
                   </div>
@@ -568,4 +568,5 @@ function FieldRow({ label, children }: { label: string; children: React.ReactNod
     </div>
   );
 }
+
 
