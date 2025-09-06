@@ -19,12 +19,13 @@ jobs:
         with:
           version: 9
           run_install: false
+
       - name: Install web deps
-        run: pnpm -C web install
+        run: pnpm -C web install --no-frozen-lockfile
       - name: Build web (Next static export)
         run: pnpm -C web build
       - name: Install desktop deps
-        run: pnpm -C desktop install
+        run: pnpm -C desktop install --no-frozen-lockfile
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
       - name: Upload Windows installer
@@ -50,12 +51,13 @@ jobs:
         with:
           version: 9
           run_install: false
+
       - name: Install web deps
-        run: pnpm -C web install
+        run: pnpm -C web install --no-frozen-lockfile
       - name: Build web (Next static export)
         run: pnpm -C web build
       - name: Install desktop deps
-        run: pnpm -C desktop install
+        run: pnpm -C desktop install --no-frozen-lockfile
       - name: Build desktop artifacts
         run: pnpm -C desktop dist
       - name: Upload macOS image
